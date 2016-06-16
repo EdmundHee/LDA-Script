@@ -20,7 +20,8 @@ class Stopword:
     def update_stopword(self,stopword_list):
         self.get_stopwords()
         for stopword in stopword_list:
-            self.stopwords.append(stopword)
+            if stopword not in self.stopwords:
+                self.stopwords.append(stopword)
         self.create_stopword_file()
 
     def create_stopword_file(self):

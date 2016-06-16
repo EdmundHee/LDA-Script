@@ -32,10 +32,6 @@ class Classifier:
             for w in numpy.argsort(-phi[k]):
                 # if phi[k,w] >= 0.0001:
                 print "%s: %f" % (llda.vocas[w], phi[k,w])
-                if phi[k,w] <= 0.001:
-                    new_stopword.append(llda.vocas[w])
-        Stopword(self.file_dir).update_stopword(new_stopword)
-
 
     def lemmatize(self, string):
         return WordNetLemmatizer().lemmatize(string, pos='v')
@@ -48,6 +44,9 @@ class Classifier:
             for w in numpy.argsort(-phi[k]):
                 if phi[k,w] <= 0.001:
                     new_stopword.append(llda.vocas[w])
+                else:
+                    if llda.vocas[w] in new_stopword:
+                        new_stopword.remove(llda.vocas[w])
         Stopword(self.file_dir).update_stopword(new_stopword)
 
     def create_label_corpus(self,filename):
