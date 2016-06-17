@@ -1,9 +1,10 @@
-import os, json
+import os
+import cPickle as pickle
 
 class Stopword:
 
     def __init__(self,file_dir):
-        self.filename = "stopwords.txt"
+        self.filename = "stopwords.p"
         self.file_dir = file_dir
 
     def get_stopwords(self):
@@ -15,7 +16,7 @@ class Stopword:
 
     def read_stopwords(self):
         with open(os.path.join(self.file_dir,self.filename),'rb') as stopwords:
-             self.stopwords = json.load(stopwords)
+             self = pickle.load(stopwords)
 
     def update_stopword(self,stopword_list):
         self.get_stopwords()
@@ -28,7 +29,7 @@ class Stopword:
         if not hasattr(self,'stopwords'):
             self.init_stopword()
         with open(os.path.join(self.file_dir,self.filename),'wb') as stopword_file:
-            json.dump(self.stopwords,stopword_file)
+            pickle.dump(self,stopword_file,protocol=pickle.HIGHEST_PROTOCOL)
 
     # Initial stopwords
     def init_stopword(self):

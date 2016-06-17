@@ -5,7 +5,7 @@
 
 # SOURCE: https://github.com/shuyo/iir/blob/master/lda/llda.py
 
-import numpy
+import numpy,os
 
 class LLDA:
 

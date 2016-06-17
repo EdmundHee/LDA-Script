@@ -6,9 +6,7 @@ from llda import LLDA
 
 class Classifier:
 
-
     def __init__(self, options):
-
         self.options = options
         self.file_dir = "./build/"
         self.stopwords = Stopword(self.file_dir).get_stopwords()
@@ -17,37 +15,22 @@ class Classifier:
 
     def train_model(self, filename, model_name):
         self.create_label_corpus(filename)
-        llda = LLDA(self.options.K, self.options.alpha, self.options.beta)
-        llda.set_corpus(self.labelset, self.corpus, self.labels)
-        print "M=%d, V=%d, L=%d, K=%d" % (len(self.corpus), len(llda.vocas), len(self.labelset), self.options.K)
+        self.llda = LLDA(self.options.K, self.options.alpha, self.options.beta)
+        self.llda.set_corpus(self.labelset, self.corpus, self.labels)
+        print "M=%d, V=%d, L=%d, K=%d" % (len(self.corpus), len(self.llda.vocas), len(self.labelset), self.options.K)
         for index in range(self.options.iteration):
-            sys.stderr.write("-- %d : %.4f\n" % (index, llda.perplexity()))
-        print "perplexity : %.4f" % llda.perplexity()
-        phi = llda.phi()
-        theta = llda.theta()
+            sys.stderr.write("-- %d : %.4f\n" % (index, self.llda.perplexity()))
+        print "perplexity : %.4f" % self.llda.perplexity()
+        phi = self.llda.phi()
+        theta = self.llda.theta()
         new_stopword = []
         for k, label in enumerate(self.labelset):
             print "\n-- label %d : %s" % (k, label)
-            # for w in numpy.argsort(-phi[k])[:30]:
             for w in numpy.argsort(-phi[k]):
-                # if phi[k,w] >= 0.0001:
-                print "%s: %f" % (llda.vocas[w], phi[k,w])
+                print "%s: %f" % (self.llda.vocas[w], phi[k,w])
 
     def lemmatize(self, string):
         return WordNetLemmatizer().lemmatize(string, pos='v')
-
-    def update_stopwords(self):
-        new_stopword = []
-        phi = llda.phi()
-        theta = llda.theta()
-        for k, label in enumerate(self.labelset):
-            for w in numpy.argsort(-phi[k]):
-                if phi[k,w] <= 0.001:
-                    new_stopword.append(llda.vocas[w])
-                else:
-                    if llda.vocas[w] in new_stopword:
-                        new_stopword.remove(llda.vocas[w])
-        Stopword(self.file_dir).update_stopword(new_stopword)
 
     def create_label_corpus(self,filename):
         with open(os.path.join(self.file_dir,filename)) as model:
@@ -56,9 +39,9 @@ class Classifier:
                 selected_labels = []
 
                 split_row = row.lower().split("\"|\"")
-                label_array = re.sub(r'\W+',' ',split_row[0]).split()
+                label_array = self.filter_split(split_row[0])
                 # Create Unicoded label_type
-                for label_type in re.sub(r'\W+',' ',split_row[1]).split():
+                for label_type in self.filter_split(split_row[1]):
                     label_class_list.append(unicode(label_type,"utf-8"))
 
                 for label in label_array[:-1]:
@@ -69,6 +52,20 @@ class Classifier:
                 self.corpus.append(selected_labels)
                 self.labels.append(label_class_list)
                 self.labelset = list(set(reduce(list.__add__, self.labels)))
+
+    def filter_split(self,label):
+        return re.sub(r'\W+',' ',label).split()
+
+    def save_model(self, file_dir, model_name):
+        with open(os.path.join(file_dir,model_name + ".p"),'wb') as model_file:
+            pickle.dump(self.llda,model_file,protocol=pickle.HIGHEST_PROTOCOL)
+
+    def load_model(self,file_dir,model_name):
+        if os.path.isfile(os.path.join(file_dir,model_name+ ".p")):
+            with open(os.path.join(file_dir,model_name + ".p"),'rb') as model_file:
+                self.llda = pickle.load(model_file)
+        else:
+            print "Trained model for %s is not found in %s directory", model_name, file_dir
 
 
 parser = OptionParser()
