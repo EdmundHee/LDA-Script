@@ -55,18 +55,18 @@ python classifier.py --sos
 ```
 
 ## Commands
-Command | Type | Default Value | function |Example
---- | --- | --- | --- | --
---alpha | float | 0.005 | Alpha value |--alpha 0.001
---beta | float | 0.005 | Beta value |--beta 0.001
--t | boolean | false | Trigger train model function | -t
--c | boolean | false | Trigger classification function | -c
--m | string | no default value | Model name | -m food
--l | string | no default value | String to pass in for classification| -c "Beef Chicken"
--k | integer | 10 | Number of topics | -k 50
--i | integer | 100 | Number of iteration | -i 200
--f | string | no default value| Filename | -f food.txt
---sos | boolean | false | Display example and command list| --sos
+| Command | Type | Default Value | function | Example |
+|--- | --- | --- | --- | --- |
+|--alpha | float | 0.005 | Alpha value |--alpha 0.001 |
+|--beta | float | 0.005 | Beta value |--beta 0.001 |
+|-t | boolean | false | Trigger train model function | -t |
+|-c | boolean | false | Trigger classification function | -c |
+|-m | string | no default value | Model name | -m food |
+|-l | string | no default value | String to pass in for classification| -c "Beef Chicken" |
+|-k | integer | 10 | Number of topics | -k 50 |
+|-i | integer | 100 | Number of iteration | -i 200 |
+|-f | string | no default value| Filename | -f food.txt |
+|--sos | boolean | false | Display example and command list| --sos |
 
 ---
 
