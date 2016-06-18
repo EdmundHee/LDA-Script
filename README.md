@@ -34,7 +34,7 @@ python classifier.py -t -f food.txt -m food
 ```
 5. Two file will be created in build folder:
     * stopwords.p
-    * food_trained.p
+    * food_trained.p (Trained Model)
 6. Result of perplexity and keyword weightage will be display in terminal
 
 ---
