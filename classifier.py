@@ -1,3 +1,5 @@
+# Written by Edmund Hee - 20160618
+
 import os, json, re, sys, numpy
 from nltk.stem import WordNetLemmatizer
 from optparse import OptionParser
@@ -82,7 +84,6 @@ class Classifier:
             result = numpy.argwhere(result_vector == v)
         else:
             result = result_vector.argmax()
-        print result_vector
         print self.lda.labelmap.keys()[self.lda.labelmap.values().index(result)]
         return self.lda.labelmap.keys()[self.lda.labelmap.values().index(result)]
 
@@ -103,13 +104,37 @@ class Classifier:
 
 
 parser = OptionParser()
-parser.add_option("-f", dest="filename", type="string", help="filename", default="stopwords.txt")
-parser.add_option("--alpha", dest="alpha", type="float", help="parameter alpha", default=0.0005)
-parser.add_option("--beta", dest="beta", type="float", help="parameter beta", default=0.00125)
-parser.add_option("-k", dest="K", type="int", help="number of topics", default=50)
+parser.add_option("-f", dest="filename", type="string", help="File Name")
+parser.add_option("-m", dest="model_name", type="string", help="Model name")
+parser.add_option("-l", dest="label", type="string", help="Label to pass for classification")
+parser.add_option("--alpha", dest="alpha", type="float", help="parameter alpha", default=0.005)
+parser.add_option("--beta", dest="beta", type="float", help="parameter beta", default=0.005)
+parser.add_option("-k", dest="K", type="int", help="number of topics", default=10)
 parser.add_option("-i", dest="iteration", type="int", help="iteration count", default=100)
-parser.add_option("-n", dest="samplesize", type="int", help="dataset sample size", default=100)
+parser.add_option("-t", dest="train", help="train data", default= False, action='store_true')
+parser.add_option("-c", dest="classify", help="Classify data", default= False, action='store_true')
+parser.add_option("--sos", dest="help", help="Help ME!", default= False, action='store_true')
 (options, args) = parser.parse_args()
 classifier = Classifier(options)
-# classifier.train_model("test.txt","test")
-# classifier.classify("test","edmund raymond java success")
+if options.train:
+    classifier.train_model(options.filename,options.model_name)
+elif options.classify:
+    classifier.classify(options.model_name,options.label)
+elif options.help:
+    print "--alpha : Set alpha value (default 0.005)"
+    print "--beta  : Set beta value (default: 0.005)"
+    print "-t : Train with training data in build directory"
+    print "-c : Get classification result from trained model"
+    print "-m  : Model name of data in build directory"
+    print "-l : label to predict (e.g -l \"<TITLE>\")"
+    print "-k      : Number of topics (default: 10) * will change according to data set"
+    print "-i      : Number of interation (default: 100)"
+    print "-n      : Number of sample size (default: 100) * will change according to data set"
+    print "-f      : Filename  (e.g -f <FILENAME>) default:headlones_classified.txt"
+    print "\n"
+    print "To train data"
+    print "python classifier.py -m <MODEL_NAME> -f <TEXT_FILE_NAME>.txt -t"
+    print "To train classify"
+    print "python classifier.py -c -m <MODEL_NAME> -l \"<LABEL TO PASS INTO LDA>\""
+else:
+    print "Pleaes Select Type: -t for train model -c for classification"

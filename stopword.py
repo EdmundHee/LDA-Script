@@ -1,3 +1,5 @@
+# Written by Edmund Hee - 20160618
+
 import os
 import cPickle as pickle
 
