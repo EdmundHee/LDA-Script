@@ -56,7 +56,7 @@ python classifier.py --sos
 
 ## Commands
 Command | Type | Default Value | function |Example
---- | --- | --- | ---
+--- | --- | --- | --- | --
 --alpha | float | 0.005 | Alpha value |--alpha 0.001
 --beta | float | 0.005 | Beta value |--beta 0.001
 -t | boolean | false | Trigger train model function | -t
