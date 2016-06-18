@@ -7,7 +7,7 @@
 
 import numpy,os
 
-class LLDA:
+class LDA:
 
     def __init__(self, K, alpha, beta):
         self.K = K
