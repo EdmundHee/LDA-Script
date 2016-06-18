@@ -21,16 +21,16 @@ Scripts created for **supervised learning**
 3. Content of food text file should be as follow
 Format of content
 ```
-"<KEYWORDS"|"<CLASS TYPE>"
+    "<KEYWORDS"|"<CLASS TYPE>"
 ```
 Example
 ```
-"Cabbage Celery Chicory Corn"|"Vegetable"
-"Beef Chicken Fish"|"Meat"
+    "Cabbage Celery Chicory Corn"|"Vegetable"
+    "Beef Chicken Fish"|"Meat"
 ```
 4. Type the following command to train the model
 ```
-python classifier.py -t -f food.txt -m food
+    python classifier.py -t -f food.txt -m food
 ```
 5. Two file will be created in build folder:
     * stopwords.p
@@ -42,7 +42,7 @@ python classifier.py -t -f food.txt -m food
 ## How to classify after train (Mac - Terminal)
 1. In terminal type
 ```
-python classifier.py -c -m food -l "beef"
+    python classifier.py -c -m food -l "beef"
 ```
 2. Result will be shown in terminal
 
